@@ -3,7 +3,7 @@
 import { SyntheticEvent, useState } from 'react';
 import { ArrowRight, BarChart3, CalendarDays, Camera, Check, Menu, Sparkles, TrendingUp, X } from 'lucide-react';
 
-const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@lunellemanagement.com';
+const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'tony@radcipher.com';
 const services = [
   { icon: Camera, number: '01', title: 'Content strategy', copy: 'A clear creative direction built around your personality, audience and goals — so every post has a purpose.' },
   { icon: CalendarDays, number: '02', title: 'Profile management', copy: 'We handle positioning, scheduling, audience conversations and the day-to-day systems behind your profile.' },
