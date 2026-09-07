@@ -21,8 +21,9 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   async function submitApplication(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setFormStatus('sending');
-    const data = new FormData(event.currentTarget);
+    const data = new FormData(form);
     const field = (key: string) => {
       const value = data.get(key);
       return typeof value === 'string' ? value : '';
@@ -37,7 +38,7 @@ export default function Home() {
       body: JSON.stringify({ name, email, profile, goals, company: field('company') }),
     }).catch(() => null);
     if (response?.ok) {
-      event.currentTarget.reset();
+      form.reset();
       setFormStatus('sent');
     } else {
       setFormStatus('error');
