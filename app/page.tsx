@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { SyntheticEvent, useState } from 'react';
 import { ArrowRight, BarChart3, CalendarDays, Camera, Check, Menu, Sparkles, TrendingUp, X } from 'lucide-react';
 
@@ -38,7 +37,7 @@ export default function Home() {
   return (
     <main>
       <header className="nav-wrap">
-        <a className="brand" href="#top" aria-label="Lunelle Management home"><Image src="/lunelle-mark.png" alt="" width={34} height={34} /><span>LUNELLE</span></a>
+        <a className="brand" href="#top" aria-label="Lunelle Management home"><img src="/lunelle-mark.png" alt="" width={34} height={34} /><span>LUNELLE</span></a>
         <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Main navigation">
           <a href="#services" onClick={() => setMenuOpen(false)}>What we do</a><a href="#process" onClick={() => setMenuOpen(false)}>How it works</a><a href="#about" onClick={() => setMenuOpen(false)}>Why Lunelle</a>
           <a className="nav-cta" href="#apply" onClick={() => setMenuOpen(false)}>Apply now <ArrowRight size={15} /></a>
@@ -56,7 +55,7 @@ export default function Home() {
             <div className="trust-line"><span className="avatars"><i>L</i><i>✦</i><i>+</i></span><p><strong>Selective by design.</strong><br />Personal attention. Serious growth.</p></div>
           </div>
           <div className="hero-visual reveal delay">
-            <div className="image-frame"><Image src="/lunelle-creator.png" alt="Lunelle creator in a soft lavender setting" width={1200} height={1200} priority /><span className="corner corner-tl" /><span className="corner corner-br" /></div>
+            <div className="image-frame"><img src="/lunelle-creator.png" alt="Lunelle creator in a soft lavender setting" width={1200} height={1200} fetchPriority="high" /><span className="corner corner-tl" /><span className="corner corner-br" /></div>
             <div className="floating-card card-top"><span className="pulse" /> Strategy active</div><div className="floating-card card-bottom"><strong>Full-service</strong><span>Management · Marketing · Growth</span></div>
           </div>
         </div>
@@ -73,7 +72,7 @@ export default function Home() {
         <div className="apply-copy"><p className="section-label light">Private applications</p><h2>Your next chapter<br />starts <em>here.</em></h2><p>We work closely with a select group of ambitious creators. Tell us a little about you and we’ll be in touch if it feels like the right fit.</p><ul><li><Check size={16} /> Confidential from the first conversation</li><li><Check size={16} /> No pressure, no generic sales pitch</li><li><Check size={16} /> A strategy built around your goals</li></ul></div>
         <form className="apply-form" onSubmit={submitApplication}><div className="form-head"><span>Creator application</span><b>✦</b></div><label>Full name<input required name="name" autoComplete="name" placeholder="Your name" /></label><label>Email address<input required type="email" name="email" autoComplete="email" placeholder="you@email.com" /></label><label>Creator profile or social link<input name="profile" type="url" placeholder="https://" /></label><label>What would you like to achieve?<textarea required name="goals" rows={4} placeholder="Tell us about your goals..." /></label><button className="button submit" type="submit">Send application <ArrowRight size={17} /></button><p className="privacy-note">Submitting opens your email app with your application ready to send.</p></form>
       </section>
-      <footer><div className="footer-brand"><Image src="/lunelle-mark.png" alt="" width={28} height={28} /><span>LUNELLE</span></div><p>Elevate <b>·</b> Empower <b>·</b> Earn</p><div><span>© 2026 Lunelle Management</span><a href={`mailto:${contactEmail}`}>Contact</a></div></footer>
+      <footer><div className="footer-brand"><img src="/lunelle-mark.png" alt="" width={28} height={28} /><span>LUNELLE</span></div><p>Elevate <b>·</b> Empower <b>·</b> Earn</p><div><span>© 2026 Lunelle Management</span><a href={`mailto:${contactEmail}`}>Contact</a></div></footer>
     </main>
   );
 }
