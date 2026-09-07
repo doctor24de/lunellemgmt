@@ -3,7 +3,6 @@
 import { SyntheticEvent, useState } from 'react';
 import { ArrowRight, BarChart3, CalendarDays, Camera, Check, Menu, Sparkles, TrendingUp, X } from 'lucide-react';
 
-const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'tony@radcipher.com';
 const services = [
   { icon: Camera, number: '01', title: 'Content strategy', copy: 'A clear creative direction built around your personality, audience and goals — so every post has a purpose.' },
   { icon: CalendarDays, number: '02', title: 'Profile management', copy: 'We handle positioning, scheduling, audience conversations and the day-to-day systems behind your profile.' },
@@ -19,8 +18,10 @@ const steps = [
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  function submitApplication(event: SyntheticEvent<HTMLFormElement>) {
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  async function submitApplication(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
+    setFormStatus('sending');
     const data = new FormData(event.currentTarget);
     const field = (key: string) => {
       const value = data.get(key);
@@ -30,9 +31,17 @@ export default function Home() {
     const email = field('email');
     const profile = field('profile');
     const goals = field('goals');
-    const subject = encodeURIComponent(`Creator application — ${name}`);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCreator profile: ${profile}\n\nGoals:\n${goals}`);
-    window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+    const response = await fetch('/api/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, profile, goals, company: field('company') }),
+    }).catch(() => null);
+    if (response?.ok) {
+      event.currentTarget.reset();
+      setFormStatus('sent');
+    } else {
+      setFormStatus('error');
+    }
   }
   return (
     <main>
@@ -70,9 +79,9 @@ export default function Home() {
       <section className="process" id="process"><div className="section-heading"><div><p className="section-label">The experience</p><h2>Simple to start.<br /><em>Built to scale.</em></h2></div><p>A considered process with clarity at every step, from first conversation to long-term growth.</p></div><div className="steps">{steps.map(([title, copy], index) => <div className="step" key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{copy}</p></div></div>)}</div></section>
       <section className="apply" id="apply">
         <div className="apply-copy"><p className="section-label light">Private applications</p><h2>Your next chapter<br />starts <em>here.</em></h2><p>We work closely with a select group of ambitious creators. Tell us a little about you and we’ll be in touch if it feels like the right fit.</p><ul><li><Check size={16} /> Confidential from the first conversation</li><li><Check size={16} /> No pressure, no generic sales pitch</li><li><Check size={16} /> A strategy built around your goals</li></ul></div>
-        <form className="apply-form" onSubmit={submitApplication}><div className="form-head"><span>Creator application</span><b>✦</b></div><label>Full name<input required name="name" autoComplete="name" placeholder="Your name" /></label><label>Email address<input required type="email" name="email" autoComplete="email" placeholder="you@email.com" /></label><label>Creator profile or social link<input name="profile" type="url" placeholder="https://" /></label><label>What would you like to achieve?<textarea required name="goals" rows={4} placeholder="Tell us about your goals..." /></label><button className="button submit" type="submit">Send application <ArrowRight size={17} /></button><p className="privacy-note">Submitting opens your email app with your application ready to send.</p></form>
+        <form className="apply-form" onSubmit={submitApplication}><div className="form-head"><span>Creator application</span><b>✦</b></div><label>Full name<input required name="name" autoComplete="name" placeholder="Your name" /></label><label>Email address<input required type="email" name="email" autoComplete="email" placeholder="you@email.com" /></label><label>Creator profile or social link<input name="profile" type="url" placeholder="https://" /></label><label>What would you like to achieve?<textarea required name="goals" rows={4} placeholder="Tell us about your goals..." /></label><label className="honeypot" aria-hidden="true">Company<input name="company" tabIndex={-1} autoComplete="off" /></label><button className="button submit" type="submit" disabled={formStatus === 'sending' || formStatus === 'sent'}>{formStatus === 'sending' ? 'Sending…' : formStatus === 'sent' ? 'Application sent' : 'Send application'} {formStatus === 'idle' && <ArrowRight size={17} />}</button><p className={`form-message ${formStatus}`}>{formStatus === 'sent' ? 'Thank you — your application has been sent privately.' : formStatus === 'error' ? 'Something went wrong. Please try again in a moment.' : 'Your details are sent securely and kept confidential.'}</p></form>
       </section>
-      <footer><div className="footer-brand"><img src="/lunelle-mark-small.png" alt="" width={28} height={28} loading="lazy" decoding="async" /><span>LUNELLE</span></div><p>Elevate <b>·</b> Empower <b>·</b> Earn</p><div><span>© 2026 Lunelle Management</span><a href={`mailto:${contactEmail}`}>Contact</a></div></footer>
+      <footer><div className="footer-brand"><img src="/lunelle-mark-small.png" alt="" width={28} height={28} loading="lazy" decoding="async" /><span>LUNELLE</span></div><p>Elevate <b>·</b> Empower <b>·</b> Earn</p><div><span>© 2026 Lunelle Management</span></div></footer>
     </main>
   );
 }
