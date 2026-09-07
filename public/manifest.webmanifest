@@ -1,0 +1,13 @@
+{
+  "name": "Lunelle Management",
+  "short_name": "Lunelle",
+  "description": "Boutique creator management, marketing and growth.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fcfbff",
+  "theme_color": "#8957f7",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "64x64", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
