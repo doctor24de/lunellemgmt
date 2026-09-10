@@ -40,6 +40,8 @@ export default function Home() {
     if (response?.ok) {
       form.reset();
       setFormStatus('sent');
+      const analytics = window as Window & { umami?: { track: (event: string) => void } };
+      analytics.umami?.track('Application sent');
     } else {
       setFormStatus('error');
     }
@@ -49,8 +51,8 @@ export default function Home() {
       <header className="nav-wrap">
         <a className="brand" href="#top" aria-label="Lunelle Management home"><img src="/lunelle-mark-small.png" alt="" width={34} height={34} decoding="async" /><span>LUNELLE</span></a>
         <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Main navigation">
-          <a href="#services" onClick={() => setMenuOpen(false)}>What we do</a><a href="#process" onClick={() => setMenuOpen(false)}>How it works</a><a href="#about" onClick={() => setMenuOpen(false)}>Why Lunelle</a>
-          <a className="nav-cta" href="#apply" onClick={() => setMenuOpen(false)}>Apply now <ArrowRight size={15} /></a>
+          <a href="#services" onClick={() => setMenuOpen(false)}>What we do</a><a href="#process" onClick={() => setMenuOpen(false)}>How it works</a><a href="/insights">Insights</a>
+          <a className="nav-cta" href="#apply" onClick={() => setMenuOpen(false)} data-umami-event="Header apply CTA">Apply now <ArrowRight size={15} /></a>
         </nav>
         <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
       </header>
@@ -61,7 +63,7 @@ export default function Home() {
             <p className="eyebrow"><Sparkles size={14} /> Boutique creator management</p>
             <h1>You create.<br />We build the <em>business.</em></h1>
             <p className="hero-lead">Lunelle turns your content into a powerful, professionally managed brand — with the strategy, structure and marketing to help you grow.</p>
-            <div className="hero-actions"><a className="button primary" href="#apply">Apply to join <ArrowRight size={17} /></a><a className="text-link" href="#services">Discover Lunelle <span>↓</span></a></div>
+            <div className="hero-actions"><a className="button primary" href="#apply" data-umami-event="Hero apply CTA">Apply to join <ArrowRight size={17} /></a><a className="text-link" href="#services">Discover Lunelle <span>↓</span></a></div>
             <div className="trust-line"><span className="avatars"><i>L</i><i>✦</i><i>+</i></span><p><strong>Selective by design.</strong><br />Personal attention. Serious growth.</p></div>
           </div>
           <div className="hero-visual reveal delay">
@@ -82,7 +84,7 @@ export default function Home() {
         <div className="apply-copy"><p className="section-label light">Private applications</p><h2>Your next chapter<br />starts <em>here.</em></h2><p>We work closely with a select group of ambitious creators. Tell us a little about you and we’ll be in touch if it feels like the right fit.</p><ul><li><Check size={16} /> Confidential from the first conversation</li><li><Check size={16} /> No pressure, no generic sales pitch</li><li><Check size={16} /> A strategy built around your goals</li></ul></div>
         <form className="apply-form" onSubmit={submitApplication}><div className="form-head"><span>Creator application</span><b>✦</b></div><label>Full name<input required name="name" autoComplete="name" placeholder="Your name" /></label><label>Email address<input required type="email" name="email" autoComplete="email" placeholder="you@email.com" /></label><label>Creator profile or social link<input name="profile" type="url" placeholder="https://" /></label><label>What would you like to achieve?<textarea required name="goals" rows={4} placeholder="Tell us about your goals..." /></label><label className="honeypot" aria-hidden="true">Company<input name="company" tabIndex={-1} autoComplete="off" /></label><button className="button submit" type="submit" disabled={formStatus === 'sending' || formStatus === 'sent'}>{formStatus === 'sending' ? 'Sending…' : formStatus === 'sent' ? 'Application sent' : 'Send application'} {formStatus === 'idle' && <ArrowRight size={17} />}</button><p className={`form-message ${formStatus}`}>{formStatus === 'sent' ? 'Thank you — your application has been sent privately.' : formStatus === 'error' ? 'Something went wrong. Please try again in a moment.' : 'Your details are sent securely and kept confidential.'}</p></form>
       </section>
-      <footer><div className="footer-brand"><img src="/lunelle-mark-small.png" alt="" width={28} height={28} loading="lazy" decoding="async" /><span>LUNELLE</span></div><p>Elevate <b>·</b> Empower <b>·</b> Earn</p><div><span>© 2026 Lunelle Management</span></div></footer>
+      <footer><div className="footer-brand"><img src="/lunelle-mark-small.png" alt="" width={28} height={28} loading="lazy" decoding="async" /><span>LUNELLE</span></div><p>Elevate <b>·</b> Empower <b>·</b> Earn</p><div><a href="/insights">Insights</a><span>© 2026 Lunelle Management</span></div></footer>
     </main>
   );
 }
