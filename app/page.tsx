@@ -1,90 +1,63 @@
 'use client';
 
 import { SyntheticEvent, useState } from 'react';
-import { ArrowRight, BarChart3, CalendarDays, Camera, Check, Menu, Sparkles, TrendingUp, X } from 'lucide-react';
+import { ArrowDownRight, ArrowRight, Camera, Check, ChevronDown, LineChart, LockKeyhole, Menu, MessageCircle, ShieldCheck, Sparkles, TrendingUp, X } from 'lucide-react';
 
 const services = [
-  { icon: Camera, number: '01', title: 'Content strategy', copy: 'A clear creative direction built around your personality, audience and goals — so every post has a purpose.' },
-  { icon: CalendarDays, number: '02', title: 'Profile management', copy: 'We handle positioning, scheduling, audience conversations and the day-to-day systems behind your profile.' },
-  { icon: BarChart3, number: '03', title: 'Marketing & growth', copy: 'Data-led promotion and platform strategy designed to expand your reach and convert attention into loyal subscribers.' },
-  { icon: TrendingUp, number: '04', title: 'Scale with confidence', copy: 'Weekly insight, constant optimisation and a dedicated team focused on building a durable creator business.' },
+  { icon: Camera, number: '01', title: 'Brand & content direction', copy: 'A recognisable creative identity, content roadmap and posting rhythm built around your personality.' },
+  { icon: TrendingUp, number: '02', title: 'Audience acquisition', copy: 'Platform-specific marketing systems that turn social attention into qualified subscribers.' },
+  { icon: MessageCircle, number: '03', title: 'Profile operations', copy: 'Daily publishing, audience care, retention and monetisation—managed with your voice and boundaries in mind.' },
+  { icon: LineChart, number: '04', title: 'Performance intelligence', copy: 'Clear reporting, fast experiments and weekly decisions informed by what your audience responds to.' },
 ];
-const steps = [
-  ['Apply', 'Tell us where you are now and what you want to build.'],
-  ['Align', 'We map the strategy, brand direction and systems around you.'],
-  ['Create', 'You focus on content while our team runs the operation.'],
-  ['Elevate', 'We optimise, grow and scale — together.'],
+const operatingSystem = [
+  ['Position', 'A brand people remember', 'We define the story, visual direction and audience position that makes you unmistakably you.'],
+  ['Create', 'A system you can sustain', 'You receive a focused content plan. No guessing, chaotic calendars or pressure to become someone else.'],
+  ['Convert', 'Attention into loyalty', 'We operate your profiles, nurture your audience and refine every stage of the subscriber journey.'],
+  ['Compound', 'Growth that gets smarter', 'Insights flow back into the next creative cycle, so every month builds on the last.'],
+];
+const principles = [
+  ['Creator-first', 'Your image, boundaries and final decisions remain yours. Always.'],
+  ['Selective partnership', 'A focused roster means senior attention and strategy shaped around you.'],
+  ['Discreet by default', 'Applications, performance data and private conversations stay confidential.'],
+  ['No empty promises', 'We build through testing, consistency and transparent performance reviews.'],
+];
+const faqs = [
+  ['What do I need to do?', 'You create the content. We give you a clear plan and handle strategy, profile operations, marketing and optimisation around it.'],
+  ['Do you work with new creators?', 'We consider emerging and established creators. Ambition, consistency and brand potential matter more than follower count alone.'],
+  ['Will I keep control of my brand?', 'Yes. The partnership is built around your voice, comfort and boundaries. We provide the operation—not a replacement personality.'],
+  ['What happens after I apply?', 'We privately review your application. If there is a strong fit, we contact you for an honest, no-pressure strategy conversation.'],
 ];
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   async function submitApplication(event: SyntheticEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    setFormStatus('sending');
-    const data = new FormData(form);
-    const field = (key: string) => {
-      const value = data.get(key);
-      return typeof value === 'string' ? value : '';
-    };
-    const name = field('name');
-    const email = field('email');
-    const profile = field('profile');
-    const goals = field('goals');
-    const response = await fetch('/api/apply', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, profile, goals, company: field('company') }),
-    }).catch(() => null);
-    if (response?.ok) {
-      form.reset();
-      setFormStatus('sent');
-      const analytics = window as Window & { umami?: { track: (event: string) => void } };
-      analytics.umami?.track('Application sent');
-    } else {
-      setFormStatus('error');
-    }
+    event.preventDefault(); const form = event.currentTarget; setFormStatus('sending');
+    const data = new FormData(form); const field = (key: string) => { const value = data.get(key); return typeof value === 'string' ? value : ''; };
+    const controller = new AbortController(); const timeout = window.setTimeout(() => controller.abort(), 15000);
+    const response = await fetch('/api/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: controller.signal, body: JSON.stringify({ name: field('name'), email: field('email'), profile: field('profile'), goals: field('goals'), company: field('company') }) }).catch(() => null);
+    window.clearTimeout(timeout);
+    if (response?.ok) { form.reset(); setFormStatus('sent'); (window as Window & { umami?: { track: (event: string) => void } }).umami?.track('Application sent'); } else setFormStatus('error');
   }
-  return (
-    <main>
-      <header className="nav-wrap">
-        <a className="brand" href="#top" aria-label="Lunelle Management home"><img src="/lunelle-mark-small.png" alt="" width={34} height={34} decoding="async" /><span>LUNELLE</span></a>
-        <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Main navigation">
-          <a href="#services" onClick={() => setMenuOpen(false)}>What we do</a><a href="#process" onClick={() => setMenuOpen(false)}>How it works</a><a href="/insights">Insights</a>
-          <a className="nav-cta" href="#apply" onClick={() => setMenuOpen(false)} data-umami-event="Header apply CTA">Apply now <ArrowRight size={15} /></a>
-        </nav>
-        <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
-      </header>
-      <section className="hero" id="top">
-        <div className="orb orb-one" /><div className="orb orb-two" />
-        <div className="hero-grid">
-          <div className="hero-copy reveal">
-            <p className="eyebrow"><Sparkles size={14} /> Boutique creator management</p>
-            <h1>You create.<br />We build the <em>business.</em></h1>
-            <p className="hero-lead">Lunelle turns your content into a powerful, professionally managed brand — with the strategy, structure and marketing to help you grow.</p>
-            <div className="hero-actions"><a className="button primary" href="#apply" data-umami-event="Hero apply CTA">Apply to join <ArrowRight size={17} /></a><a className="text-link" href="#services">Discover Lunelle <span>↓</span></a></div>
-            <div className="trust-line"><span className="avatars"><i>L</i><i>✦</i><i>+</i></span><p><strong>Selective by design.</strong><br />Personal attention. Serious growth.</p></div>
-          </div>
-          <div className="hero-visual reveal delay">
-            <div className="image-frame"><img src="/lunelle-creator.jpg" alt="Lunelle creator in a soft lavender setting" width={1000} height={1000} fetchPriority="high" decoding="async" /><span className="corner corner-tl" /><span className="corner corner-br" /></div>
-            <div className="floating-card card-top"><span className="pulse" /> Strategy active</div><div className="floating-card card-bottom"><strong>Full-service</strong><span>Management · Marketing · Growth</span></div>
-          </div>
-        </div>
-        <div className="hero-ticker"><span>CONTENT</span><b>✦</b><span>STRUCTURE</span><b>✦</b><span>MANAGEMENT</span><b>✦</b><span>GROWTH</span></div>
-      </section>
-      <section className="statement" id="about"><p className="section-label">The Lunelle standard</p><h2>You’re not just creating content.<br /><em>You’re building an empire.</em></h2><p>We create the operation behind your potential. Your brand stays authentically yours; the strategy, systems and relentless optimisation become ours.</p></section>
-      <section className="services" id="services">
-        <div className="section-heading"><div><p className="section-label">What we focus on</p><h2>Everything behind<br /><em>your growth.</em></h2></div><p>One expert team. One clear strategy. Every moving part working together around you.</p></div>
-        <div className="service-grid">{services.map(({ icon: Icon, number, title, copy }) => <article className="service-card" key={title}><div className="service-top"><span className="service-icon"><Icon /></span><span>{number}</span></div><h3>{title}</h3><p>{copy}</p><span className="card-line" /></article>)}</div>
-      </section>
-      <section className="focus-band"><div className="focus-inner"><div className="focus-mark">✦</div><p className="section-label light">You do what no one else can</p><h2>Stay focused on creating.<br /><em>We’ll handle the rest.</em></h2><div className="division"><div><span>You</span><strong>Create content</strong><p>Bring your voice, personality and creative energy.</p></div><i>+</i><div><span>Lunelle</span><strong>Build the business</strong><p>Strategy, management, marketing and growth.</p></div></div></div></section>
-      <section className="process" id="process"><div className="section-heading"><div><p className="section-label">The experience</p><h2>Simple to start.<br /><em>Built to scale.</em></h2></div><p>A considered process with clarity at every step, from first conversation to long-term growth.</p></div><div className="steps">{steps.map(([title, copy], index) => <div className="step" key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{copy}</p></div></div>)}</div></section>
-      <section className="apply" id="apply">
-        <div className="apply-copy"><p className="section-label light">Private applications</p><h2>Your next chapter<br />starts <em>here.</em></h2><p>We work closely with a select group of ambitious creators. Tell us a little about you and we’ll be in touch if it feels like the right fit.</p><ul><li><Check size={16} /> Confidential from the first conversation</li><li><Check size={16} /> No pressure, no generic sales pitch</li><li><Check size={16} /> A strategy built around your goals</li></ul></div>
-        <form className="apply-form" onSubmit={submitApplication}><div className="form-head"><span>Creator application</span><b>✦</b></div><label>Full name<input required name="name" autoComplete="name" placeholder="Your name" /></label><label>Email address<input required type="email" name="email" autoComplete="email" placeholder="you@email.com" /></label><label>Creator profile or social link<input name="profile" type="url" placeholder="https://" /></label><label>What would you like to achieve?<textarea required name="goals" rows={4} placeholder="Tell us about your goals..." /></label><label className="honeypot" aria-hidden="true">Company<input name="company" tabIndex={-1} autoComplete="off" /></label><button className="button submit" type="submit" disabled={formStatus === 'sending' || formStatus === 'sent'}>{formStatus === 'sending' ? 'Sending…' : formStatus === 'sent' ? 'Application sent' : 'Send application'} {formStatus === 'idle' && <ArrowRight size={17} />}</button><p className={`form-message ${formStatus}`}>{formStatus === 'sent' ? 'Thank you — your application has been sent privately.' : formStatus === 'error' ? 'Something went wrong. Please try again in a moment.' : 'Your details are sent securely and kept confidential.'}</p></form>
-      </section>
-      <footer><div className="footer-brand"><img src="/lunelle-mark-small.png" alt="" width={28} height={28} loading="lazy" decoding="async" /><span>LUNELLE</span></div><p>Elevate <b>·</b> Empower <b>·</b> Earn</p><div><a href="/insights">Insights</a><span>© 2026 Lunelle Management</span></div></footer>
-    </main>
-  );
+  return <main>
+    <header className="nav-wrap">
+      <a className="brand" href="#top" aria-label="Lunelle Management home"><img src="/lunelle-mark-small.png" alt="" width={34} height={34} /><span>LUNELLE</span></a>
+      <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Main navigation"><a href="#services" onClick={() => setMenuOpen(false)}>Expertise</a><a href="#system" onClick={() => setMenuOpen(false)}>Our system</a><a href="#standard" onClick={() => setMenuOpen(false)}>Why Lunelle</a><a href="/insights">Insights</a><a className="nav-cta" href="#apply" onClick={() => setMenuOpen(false)} data-umami-event="Header apply CTA">Private application <ArrowRight size={15} /></a></nav>
+      <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
+    </header>
+    <section className="hero" id="top"><div className="hero-aura" /><div className="hero-grid">
+      <div className="hero-copy reveal"><p className="eyebrow"><Sparkles size={14} /> Private creator management</p><h1>Create freely.<br /><em>Grow deliberately.</em></h1><p className="hero-lead">Lunelle is the strategic team behind ambitious creators—building the brand, operating the profiles and engineering the growth while you stay focused on content.</p><div className="hero-actions"><a className="button primary" href="#apply" data-umami-event="Hero apply CTA">Apply privately <ArrowRight size={17} /></a><a className="text-link" href="#system">See how it works <ArrowDownRight size={16} /></a></div><div className="hero-proof"><div><strong>One team</strong><span>around your business</span></div><div><strong>Your voice</strong><span>at every touchpoint</span></div><div><strong>Clear data</strong><span>behind every decision</span></div></div></div>
+      <div className="hero-visual reveal delay"><div className="portrait-halo" /><div className="image-frame"><img src="/lunelle-creator.jpg" alt="Creator represented by Lunelle in a soft lavender setting" width={1000} height={1000} fetchPriority="high" decoding="async" /></div><div className="floating-card card-top"><span className="pulse" /> Strategy in motion</div><div className="floating-card card-bottom"><span>THE LUNELLE MODEL</span><strong>You create.<br />We operate.</strong></div></div>
+    </div><div className="hero-ticker"><span>BRAND</span><b>✦</b><span>CONTENT</span><b>✦</b><span>MANAGEMENT</span><b>✦</b><span>MARKETING</span><b>✦</b><span>GROWTH</span></div></section>
+    <section className="manifesto"><p className="section-label">More than management</p><h2>Your content has potential.<br />We build the <em>company behind it.</em></h2><p>Great creators should not have to choose between creating and operating a full-time digital business. Lunelle gives your talent the structure, intelligence and care it deserves.</p></section>
+    <section className="services" id="services"><div className="section-heading"><div><p className="section-label">Our expertise</p><h2>Every discipline.<br /><em>One direction.</em></h2></div><p>Not a collection of disconnected services. A complete creator operation, designed to work as one.</p></div><div className="service-grid">{services.map(({ icon: Icon, number, title, copy }) => <article className="service-card" key={title}><div className="service-top"><span className="service-icon"><Icon /></span><span>{number}</span></div><h3>{title}</h3><p>{copy}</p><span className="card-arrow"><ArrowDownRight /></span></article>)}</div></section>
+    <section className="system" id="system"><div className="system-intro"><p className="section-label light">The Lunelle operating system</p><h2>From creative spark<br />to <em>scalable brand.</em></h2><p>A continuous growth loop with one purpose: remove operational noise and make your creative energy go further.</p></div><div className="system-track">{operatingSystem.map(([label, title, copy], index) => <article className="system-panel" key={label}><span>0{index + 1} / 04</span><div><p>{label}</p><h3>{title}</h3><small>{copy}</small></div></article>)}</div><div className="system-close"><span>You bring the vision.</span><strong>We make it perform.</strong></div></section>
+    <section className="standard" id="standard"><div className="standard-heading"><p className="section-label">Partnership, elevated</p><h2>High-touch by design.<br /><em>Human at every step.</em></h2></div><div className="principles">{principles.map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
+    <section className="split-story"><div className="story-visual"><img src="/lunelle-creator.jpg" alt="Lunelle creator partnership" width={1000} height={1000} loading="lazy" decoding="async" /></div><div className="story-copy"><LockKeyhole /><p className="section-label light">Built around trust</p><h2>Ambition without losing <em>yourself.</em></h2><p>Your account is not just a revenue stream. It is your name, identity and future. Strategy begins with your boundaries and every decision is made with long-term brand value in mind.</p><a href="#apply">Start a private conversation <ArrowRight size={17} /></a></div></section>
+    <section className="faq"><div><p className="section-label">Before we begin</p><h2>Clear answers.<br /><em>No hard sell.</em></h2><p>A serious partnership starts with transparency.</p></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<ChevronDown /></summary><p>{answer}</p></details>)}</div></section>
+    <section className="apply" id="apply"><div className="apply-copy"><p className="section-label light">Private applications</p><h2>Ready to build<br />what comes <em>next?</em></h2><p>We partner with a select group of creators so every relationship receives meaningful attention. Tell us where you are—and where you want to go.</p><ul><li><ShieldCheck size={16} /> Confidential from the first conversation</li><li><Check size={16} /> Honest assessment, never a generic pitch</li><li><Check size={16} /> Strategy shaped around your goals</li></ul></div>
+      <form className="apply-form" onSubmit={submitApplication}><div className="form-head"><span>Creator application</span><b>01—04</b></div><label>Full name<input required name="name" autoComplete="name" placeholder="Your name" /></label><label>Email address<input required type="email" name="email" autoComplete="email" placeholder="you@email.com" /></label><label>Creator profile or social link<input name="profile" type="url" placeholder="https://" /></label><label>What would you like to achieve?<textarea required name="goals" rows={4} placeholder="Tell us about your goals..." /></label><label className="honeypot" aria-hidden="true">Company<input name="company" tabIndex={-1} autoComplete="off" /></label><button className="button submit" type="submit" disabled={formStatus === 'sending' || formStatus === 'sent'}>{formStatus === 'sending' ? 'Sending…' : formStatus === 'sent' ? 'Application sent' : 'Send private application'} {formStatus === 'idle' && <ArrowRight size={17} />}</button><p className={`form-message ${formStatus}`}>{formStatus === 'sent' ? 'Thank you—your application has been sent privately.' : formStatus === 'error' ? 'The request timed out. Please try again in a moment.' : 'Encrypted in transit. Your details remain confidential.'}</p></form>
+    </section>
+    <footer><div className="footer-brand"><img src="/lunelle-mark-small.png" alt="" width={28} height={28} loading="lazy" /><span>LUNELLE</span></div><p>Elevate <b>·</b> Empower <b>·</b> Earn</p><div><a href="/insights">Insights</a><span>© 2026 Lunelle Management</span></div></footer>
+  </main>;
 }
