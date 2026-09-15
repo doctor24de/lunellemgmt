@@ -36,5 +36,5 @@ const structuredData = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const analyticsUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL;
   const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
-  return <html lang="en"><head>{analyticsUrl && websiteId && <script defer src={analyticsUrl} data-website-id={websiteId} />}</head><body className={`${geist.variable} antialiased`}>{children}<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} /></body></html>;
+  return <html lang="en"><body className={`${geist.variable} antialiased`}>{children}{analyticsUrl && websiteId && <script defer src={analyticsUrl} data-website-id={websiteId} />}<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} /></body></html>;
 }
