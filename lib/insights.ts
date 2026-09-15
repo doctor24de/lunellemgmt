@@ -25,11 +25,11 @@ export const insights: Insight[] = [
     ],
   },
   {
-    slug: 'fansly-growth-strategy-for-creators',
-    title: 'A Sustainable Fansly Growth Strategy for Creators',
-    description: 'Learn how positioning, consistent content systems, discovery and retention work together in a sustainable Fansly creator growth strategy.',
+    slug: 'onlyfans-growth-strategy-for-creators',
+    title: 'A Sustainable OnlyFans Growth Strategy for Creators',
+    description: 'Learn how positioning, consistent content systems, discovery and retention work together in a sustainable OnlyFans creator growth strategy.',
     category: 'Growth strategy', published: '2026-09-09', readTime: '6 min read',
-    intro: 'Sustainable Fansly growth comes from a connected system—not one viral post. Positioning attracts the right audience, consistent content builds expectation, and retention turns initial attention into a durable creator business.',
+    intro: 'Sustainable OnlyFans growth comes from a connected system—not one viral post. Positioning attracts the right audience, consistent content builds expectation, and retention turns initial attention into a durable creator business.',
     sections: [
       { heading: 'Start with a specific creator position', paragraphs: ['A memorable profile gives potential subscribers an immediate sense of personality, style and value. This does not require forcing yourself into a narrow character. It means identifying the qualities your best audience already responds to and expressing them consistently.', 'Your visual language, profile copy, previews and offers should feel like parts of the same world. Clarity makes promotion more effective because people understand why they should follow you.'] },
       { heading: 'Build a content system you can maintain', paragraphs: ['Consistency is easier when content is planned in batches and organised by purpose. Instead of deciding from scratch every day, build repeatable categories for discovery, connection, conversion and retention.'], bullets: ['Plan themes and formats before production days', 'Capture multiple usable assets from each setup', 'Maintain a realistic publishing calendar', 'Leave room for spontaneous and timely content', 'Review which formats create meaningful audience action'] },
