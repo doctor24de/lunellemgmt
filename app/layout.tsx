@@ -29,7 +29,7 @@ const structuredData = {
   '@graph': [
     { '@type': 'Organization', '@id': `${siteUrl}/#organization`, name: 'Lunelle Management', url: siteUrl, logo: `${siteUrl}/lunelle-mark-small.png`, slogan: 'Elevate. Empower. Earn.', description: 'Independent OnlyFans creator management and marketing agency.' },
     { '@type': 'WebSite', '@id': `${siteUrl}/#website`, url: siteUrl, name: 'Lunelle Management', publisher: { '@id': `${siteUrl}/#organization` }, inLanguage: 'en' },
-    { '@type': 'Service', name: 'OnlyFans Creator Management', provider: { '@id': `${siteUrl}/#organization` }, serviceType: 'OnlyFans management, OnlyFans marketing, profile operations and content strategy', areaServed: 'Worldwide', audience: { '@type': 'Audience', audienceType: 'OnlyFans content creators' }, url: siteUrl },
+    { '@type': 'Service', name: 'OnlyFans Creator Management', provider: { '@id': `${siteUrl}/#organization` }, serviceType: 'OnlyFans management, OnlyFans marketing, profile operations and content strategy', areaServed: ['Worldwide', 'Miami', 'Los Angeles', 'New York City', 'Colombia', 'Bali', 'Ibiza', 'Rio de Janeiro'], audience: { '@type': 'Audience', audienceType: 'OnlyFans content creators' }, url: siteUrl },
   ],
 };
 
